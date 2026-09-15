@@ -1,0 +1,150 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Design and FPGA Implementation of a 5-Stage Pipelined ARM Processor in Verilog},
+    pdfpagemode=FullScreen,
+}
+
+\begin{document}
+
+\title{Design, Verification, and FPGA Implementation of a 5-Stage Pipelined ARM Processor with Dynamic Forwarding and Multi-Cycle SRAM Interface}
+
+\author{\IEEEauthorblockN{Alireza Najafi Motiei}
+\IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
+\textit{University of Tehran}\\
+Tehran, Iran \\
+Email: \href{mailto:doomhammerali@email.com}{doomhammerali@email.com} \\
+Student ID: 810100224}
+}
+
+\maketitle
+
+\begin{abstract}
+This paper presents the architectural design, formal verification, and FPGA physical implementation of a 32-bit 5-stage pipelined processor implementing an ARMv4T-compatible RISC architecture using Verilog HDL. The processor features Instruction Fetch (IF), Instruction Decode (ID), Execution (EX), Memory Access (MEM), and Write-Back (WB) stages. To maximize throughput and mitigate pipeline stalls, a Dynamic Operand Forwarding Unit is integrated alongside a Load-Use Hazard Detection Unit, resolving Read-After-Write (RAW) data dependencies from both EX/MEM and MEM/WB pipeline registers with zero penalty bubbles for ALU-dependent instructions. Furthermore, a Finite State Machine (FSM) multi-cycle SRAM memory controller is designed to bridge the 32-bit core datapath with an 8-bit external byte-addressable SRAM with active-low signaling and synchronization handshakes. Cycle-accurate simulations reveal that operand forwarding reduces total execution cycles by 31.51\% under single-cycle memory and by 17.39\% under multi-cycle SRAM access. Physical implementation on a Xilinx Zynq-7000 FPGA (XC7Z010CLG400-1) demonstrates an efficient hardware footprint of 809 Slice LUTs (4.60\% utilization), 1,365 Slice Flip-Flops, and an achieved maximum operating frequency ($F_{\max}$) of 125.09 MHz with positive worst negative slack (+12.006 ns).
+\end{abstract}
+
+\begin{IEEEkeywords}
+Computer Architecture, ARM Processor, 5-Stage Pipeline, Hazard Detection, Dynamic Forwarding, SRAM Controller, Verilog HDL, FPGA Implementation, Xilinx Zynq-7000.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Pipelining is a fundamental architectural paradigm in modern microprocessor design, dividing instruction processing into discrete, overlapping stages to achieve high instruction throughput approaching one instruction per clock cycle ($\text{CPI} \to 1$). However, pipeline efficiency is inherently constrained by pipeline hazards: structural, data, and control hazards.
+
+In this work, an ARM968E-S style 32-bit pipelined processor core is synthesized and evaluated. The core implements the ARMv4T integer subset including data processing (arithmetic, logic, comparison), single-data memory transfers (LDR, STR), and conditional branch instructions. The primary objectives of this research include:
+\begin{enumerate}
+    \item Implementation of a classic 5-stage pipeline (IF, ID, EX, MEM, WB) with clean synchronous stage registers.
+    \item Dynamic Forwarding Unit design bypassing operands from EX/MEM and MEM/WB to the EX stage to minimize RAW pipeline bubbles.
+    \item Hardware evaluation of 15 ARM condition codes against architectural NZCV flags.
+    \item Implementation of an FSM-based multi-cycle SRAM controller to interface with narrow 8-bit physical memories.
+    \item Complete hardware synthesis and timing validation on a Xilinx Zynq-7000 FPGA SoC.
+\end{enumerate}
+
+\section{Processor Architecture}
+\subsection{Pipeline Overview}
+The processor datapath is partitioned into five distinct stages:
+\begin{itemize}
+    \item \textbf{Instruction Fetch (IF):} Fetches instructions from the instruction memory via the Program Counter (PC), while simultaneously computing $\text{PC}+1$.
+    \item \textbf{Instruction Decode (ID):} Decodes instruction bitfields, reads source operands from a $16 \times 32$-bit banked register file, evaluates condition codes, and unpacks the flexible shifter operand.
+    \item \textbf{Execution (EX):} Executes arithmetic/logical operations in the 32-bit ALU, generates the second ALU operand via the Barrel Shifter / Val2 Generator, evaluates condition flags into the Status Register, and calculates branch target addresses.
+    \item \textbf{Memory Access (MEM):} Interfaces with data memory or the multi-cycle SRAM controller for word transfers.
+    \item \textbf{Write-Back (WB):} Multiplexes ALU results or memory load data to update destination registers in the Register File.
+\end{itemize}
+
+\subsection{Hazard Detection and Forwarding Units}
+Data hazards occur when an instruction requires an operand generated by a preceding instruction still in flight (RAW hazard). Without bypassing, up to 2 stall cycles are incurred for data processing dependencies. 
+
+The Dynamic Forwarding Unit evaluates destination registers against source registers:
+\begin{equation}
+\text{Forward}_{\text{src1}} = 
+\begin{cases}
+2\text{'b01} & \text{if } \text{WB\_EN}_{\text{MEM}} \land (\text{Dest}_{\text{MEM}} = \text{Src1}) \\
+2\text{'b10} & \text{else if } \text{WB\_EN}_{\text{WB}} \land (\text{Dest}_{\text{WB}} = \text{Src1}) \\
+2\text{'b00} & \text{otherwise}
+\end{cases}
+\end{equation}
+
+For Load-Use hazards (where an instruction immediately follows an LDR requiring the loaded value), data cannot be forwarded in time because memory reads complete at the end of the MEM stage. In such cases, the Hazard Detection Unit asserts \texttt{hazard\_detected}, freezing the PC and IF/ID stage registers while injecting a NOP bubble into the ID/EX pipeline register.
+
+\subsection{Multi-Cycle SRAM Controller}
+External physical memory often features an 8-bit bus width rather than 32 bits. The implemented SRAM controller executes an automated 3-state Finite State Machine (\texttt{IDLE}, \texttt{WORK}, \texttt{DONE}) driven by a 2-bit counter. During store operations (\texttt{STR}), the 32-bit word is partitioned into 4 successive byte writes across 4 clock cycles. During load operations (\texttt{LDR}), 4 consecutive byte reads are assembled into a 32-bit word. The controller deasserts \texttt{cpu\_ready}, freezing upstream pipeline stages until the entire 32-bit transfer completes.
+
+\section{Experimental Results and Performance Evaluation}
+\subsection{Cycle-Accurate Simulation Benchmarks}
+The processor was evaluated using a comprehensive benchmark program comprising 47 instructions, exercising arithmetic operations, immediate rotations, conditional execution, load-use dependencies, and branch loops. Table~\ref{tab:benchmarks} presents the measured cycle counts, total execution time ($T_{\text{clk}} = 10\text{ ns}$), and CPI across all architectural configurations.
+
+\begin{table}[htbp]
+\caption{Simulation Performance and Forwarding Speedup ($N=47$ Instructions)}
+\label{tab:benchmarks}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Configuration} & \textbf{Cycles} & \textbf{Time (ns)} & \textbf{CPI} & \textbf{Speedup} \\
+\midrule
+Single-Cycle Mem (No Forwarding) & 292 & 2,920 & 6.213 & --- \\
+Single-Cycle Mem (With Forwarding) & \textbf{200} & \textbf{2,000} & \textbf{4.255} & \textbf{+31.51\%} \\
+Multi-Cycle SRAM (No Forwarding) & 529 & 5,290 & 11.255 & --- \\
+Multi-Cycle SRAM (With Forwarding) & \textbf{437} & \textbf{4,370} & \textbf{9.298} & \textbf{+17.39\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The empirical speedup from dynamic forwarding is:
+\begin{equation}
+\text{Speedup}_{\text{ideal}} = \frac{6.213 - 4.255}{6.213} \times 100\% = 31.51\%
+\end{equation}
+\begin{equation}
+\text{Speedup}_{\text{SRAM}} = \frac{11.255 - 9.298}{11.255} \times 100\% = 17.39\%
+\end{equation}
+
+\subsection{FPGA Synthesis and Resource Utilization}
+The design was synthesized and implemented on the Xilinx Zynq-7000 FPGA SoC (\texttt{xc7z010clg400-1}) using Vivado 2018.3. Table~\ref{tab:utilization} details post-synthesis and placement resource utilization.
+
+\begin{table}[htbp]
+\caption{FPGA Hardware Resource Utilization (Xilinx Zynq-7000)}
+\label{tab:utilization}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Resource} & \textbf{Used} & \textbf{Available} & \textbf{Utilization (\%)} \\
+\midrule
+Slice LUTs & 809 & 17,600 & 4.60\% \\
+\quad LUT as Logic & 679 & 17,600 & 3.86\% \\
+\quad LUT as Shift Register & 130 & 6,000 & 2.17\% \\
+Slice Registers (FF) & 1,365 & 35,200 & 3.88\% \\
+Block RAM (BRAM Tile) & 1.5 & 60 & 2.50\% \\
+F7 Multiplexers & 3 & 8,800 & 0.03\% \\
+Global Clock Buffers (BUFG) & 1 & 32 & 3.13\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Static timing analysis under a 50 MHz baseline constraint ($T = 20\text{ ns}$) yielded a Worst Negative Slack (WNS) of $+12.006\text{ ns}$ and Worst Hold Slack (WHS) of $+0.023\text{ ns}$ with zero timing violations. Consequently, the minimum allowable clock period is:
+\begin{equation}
+T_{\min} = 20\text{ ns} - 12.006\text{ ns} = 7.994\text{ ns} \implies F_{\max} \approx 125.09\text{ MHz}
+\end{equation}
+
+\section{Conclusion}
+A high-performance, pipelined 32-bit ARM RISC processor core was successfully designed, verified, and mapped onto a Xilinx Zynq-7000 FPGA. The hardware forwarding unit effectively mitigated data hazards, achieving a 31.51\% reduction in total execution cycles. The multi-cycle SRAM controller successfully abstracted narrow physical memory constraints into the pipelined execution datapath with automated handshake freezing. The synthesized processor demonstrated minimal silicon utilization (4.6\% LUTs) and robust timing closure operating up to 125 MHz.
+
+\section*{Acknowledgment}
+The author expresses sincere gratitude to Dr. Saeed Safari, Department of Electrical and Computer Engineering, University of Tehran, for guidance and supervision throughout the Computer Architecture Laboratory curriculum.
+
+\begin{thebibliography}{00}
+\bibitem{hennessy} J. L. Hennessy and D. A. Patterson, \textit{Computer Architecture: A Quantitative Approach}, 6th ed., Morgan Kaufmann, 2017.
+\bibitem{arm_ref} ARM Limited, \textit{ARM Architecture Reference Manual (ARMv4T)}, ARM DDI 0100E, 2000.
+\bibitem{xilinx_zynq} Xilinx Inc., \textit{Zynq-7000 SoC Technical Reference Manual}, UG585, 2018.
+\end{thebibliography}
+
+\end{document}

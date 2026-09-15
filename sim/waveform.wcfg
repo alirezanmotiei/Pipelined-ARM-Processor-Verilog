@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_ARM_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_ARM" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="4001337700fs"></ZoomStartTime>
+      <ZoomEndTime time="7428268736fs"></ZoomEndTime>
+      <Cursor1Time time="5290000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="204"></NameColumnWidth>
+      <ValueColumnWidth column_width="72"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="group95" type="group">
+      <obj_property name="label">IF</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/freeze" type="logic">
+         <obj_property name="ElementShortName">freeze</obj_property>
+         <obj_property name="ObjectShortName">freeze</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/Branch_taken" type="logic">
+         <obj_property name="ElementShortName">Branch_taken</obj_property>
+         <obj_property name="ObjectShortName">Branch_taken</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/BranchAddr" type="array">
+         <obj_property name="ElementShortName">BranchAddr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BranchAddr[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/PC" type="array">
+         <obj_property name="ElementShortName">PC[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/PC_out" type="array">
+         <obj_property name="ElementShortName">PC_out[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PC_out[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/Inst" type="array">
+         <obj_property name="ElementShortName">Inst[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Inst[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/PC_out_temp" type="array">
+         <obj_property name="ElementShortName">PC_out_temp[10:0]</obj_property>
+         <obj_property name="ObjectShortName">PC_out_temp[10:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/Inst_temp" type="array">
+         <obj_property name="ElementShortName">Inst_temp[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Inst_temp[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/PC_in" type="array">
+         <obj_property name="ElementShortName">PC_in[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PC_in[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/adderIn" type="array">
+         <obj_property name="ElementShortName">adderIn[31:0]</obj_property>
+         <obj_property name="ObjectShortName">adderIn[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group96" type="group">
+      <obj_property name="label">IF_ID</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="group97" type="group">
+      <obj_property name="label">ID</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Write_Back_EN" type="logic">
+         <obj_property name="ElementShortName">Write_Back_EN</obj_property>
+         <obj_property name="ObjectShortName">Write_Back_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Hazard" type="logic">
+         <obj_property name="ElementShortName">Hazard</obj_property>
+         <obj_property name="ObjectShortName">Hazard</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Instruction" type="array">
+         <obj_property name="ElementShortName">Instruction[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Instruction[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Result_WB" type="array">
+         <obj_property name="ElementShortName">Result_WB[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Result_WB[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Dest_WB" type="array">
+         <obj_property name="ElementShortName">Dest_WB[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Dest_WB[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/SR" type="array">
+         <obj_property name="ElementShortName">SR[3:0]</obj_property>
+         <obj_property name="ObjectShortName">SR[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/WB_EN" type="logic">
+         <obj_property name="ElementShortName">WB_EN</obj_property>
+         <obj_property name="ObjectShortName">WB_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/MEM_R_EN" type="logic">
+         <obj_property name="ElementShortName">MEM_R_EN</obj_property>
+         <obj_property name="ObjectShortName">MEM_R_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/MEM_W_EN" type="logic">
+         <obj_property name="ElementShortName">MEM_W_EN</obj_property>
+         <obj_property name="ObjectShortName">MEM_W_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/B" type="logic">
+         <obj_property name="ElementShortName">B</obj_property>
+         <obj_property name="ObjectShortName">B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/S" type="logic">
+         <obj_property name="ElementShortName">S</obj_property>
+         <obj_property name="ObjectShortName">S</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Two_src" type="logic">
+         <obj_property name="ElementShortName">Two_src</obj_property>
+         <obj_property name="ObjectShortName">Two_src</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Imm" type="logic">
+         <obj_property name="ElementShortName">Imm</obj_property>
+         <obj_property name="ObjectShortName">Imm</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/EXE_CMD" type="array">
+         <obj_property name="ElementShortName">EXE_CMD[3:0]</obj_property>
+         <obj_property name="ObjectShortName">EXE_CMD[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Dest" type="array">
+         <obj_property name="ElementShortName">Dest[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Dest[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Src1" type="array">
+         <obj_property name="ElementShortName">Src1[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Src1[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Src2" type="array">
+         <obj_property name="ElementShortName">Src2[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Src2[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Val_Rn" type="array">
+         <obj_property name="ElementShortName">Val_Rn[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val_Rn[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Val_Rm" type="array">
+         <obj_property name="ElementShortName">Val_Rm[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val_Rm[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Shift_Operand" type="array">
+         <obj_property name="ElementShortName">Shift_Operand[11:0]</obj_property>
+         <obj_property name="ObjectShortName">Shift_Operand[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Signed_Imm_24" type="array">
+         <obj_property name="ElementShortName">Signed_Imm_24[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Signed_Imm_24[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CC_OUT" type="logic">
+         <obj_property name="ElementShortName">CC_OUT</obj_property>
+         <obj_property name="ObjectShortName">CC_OUT</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Sel_Mux2to1_9" type="logic">
+         <obj_property name="ElementShortName">Sel_Mux2to1_9</obj_property>
+         <obj_property name="ObjectShortName">Sel_Mux2to1_9</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Mux4_OUT" type="array">
+         <obj_property name="ElementShortName">Mux4_OUT[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Mux4_OUT[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_OUT" type="array">
+         <obj_property name="ElementShortName">CT_OUT[8:0]</obj_property>
+         <obj_property name="ObjectShortName">CT_OUT[8:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Mux9_OUT" type="array">
+         <obj_property name="ElementShortName">Mux9_OUT[8:0]</obj_property>
+         <obj_property name="ObjectShortName">Mux9_OUT[8:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_WB_EN" type="logic">
+         <obj_property name="ElementShortName">CT_WB_EN</obj_property>
+         <obj_property name="ObjectShortName">CT_WB_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_MEM_R_EN" type="logic">
+         <obj_property name="ElementShortName">CT_MEM_R_EN</obj_property>
+         <obj_property name="ObjectShortName">CT_MEM_R_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_MEM_W_EN" type="logic">
+         <obj_property name="ElementShortName">CT_MEM_W_EN</obj_property>
+         <obj_property name="ObjectShortName">CT_MEM_W_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_B" type="logic">
+         <obj_property name="ElementShortName">CT_B</obj_property>
+         <obj_property name="ObjectShortName">CT_B</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_S" type="logic">
+         <obj_property name="ElementShortName">CT_S</obj_property>
+         <obj_property name="ObjectShortName">CT_S</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/CT_EXE_CMD" type="array">
+         <obj_property name="ElementShortName">CT_EXE_CMD[3:0]</obj_property>
+         <obj_property name="ObjectShortName">CT_EXE_CMD[3:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/Hazard" type="logic">
+      <obj_property name="ElementShortName">Hazard</obj_property>
+      <obj_property name="ObjectShortName">Hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="group111" type="group">
+      <obj_property name="label">EXE</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/MEM_R_EN" type="logic">
+         <obj_property name="ElementShortName">MEM_R_EN</obj_property>
+         <obj_property name="ObjectShortName">MEM_R_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/MEM_W_EN" type="logic">
+         <obj_property name="ElementShortName">MEM_W_EN</obj_property>
+         <obj_property name="ObjectShortName">MEM_W_EN</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Imm" type="logic">
+         <obj_property name="ElementShortName">Imm</obj_property>
+         <obj_property name="ObjectShortName">Imm</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/EXE_CMD" type="array">
+         <obj_property name="ElementShortName">EXE_CMD[3:0]</obj_property>
+         <obj_property name="ObjectShortName">EXE_CMD[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/SR" type="array">
+         <obj_property name="ElementShortName">SR[3:0]</obj_property>
+         <obj_property name="ObjectShortName">SR[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Shift_Operand" type="array">
+         <obj_property name="ElementShortName">Shift_Operand[11:0]</obj_property>
+         <obj_property name="ObjectShortName">Shift_Operand[11:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Signed_Imm_24" type="array">
+         <obj_property name="ElementShortName">Signed_Imm_24[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Signed_Imm_24[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Val_Rm" type="array">
+         <obj_property name="ElementShortName">Val_Rm[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val_Rm[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Val_Rn" type="array">
+         <obj_property name="ElementShortName">Val_Rn[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val_Rn[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Br_Addr" type="array">
+         <obj_property name="ElementShortName">Br_Addr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Br_Addr[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Status" type="array">
+         <obj_property name="ElementShortName">Status[3:0]</obj_property>
+         <obj_property name="ObjectShortName">Status[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Out_or" type="logic">
+         <obj_property name="ElementShortName">Out_or</obj_property>
+         <obj_property name="ObjectShortName">Out_or</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Val2" type="array">
+         <obj_property name="ElementShortName">Val2[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val2[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/N" type="logic">
+         <obj_property name="ElementShortName">N</obj_property>
+         <obj_property name="ObjectShortName">N</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/Z" type="logic">
+         <obj_property name="ElementShortName">Z</obj_property>
+         <obj_property name="ObjectShortName">Z</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/C" type="logic">
+         <obj_property name="ElementShortName">C</obj_property>
+         <obj_property name="ObjectShortName">C</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/V" type="logic">
+         <obj_property name="ElementShortName">V</obj_property>
+         <obj_property name="ObjectShortName">V</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF" type="array">
+      <obj_property name="ElementShortName">RF[15:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">RF[15:0][31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[15]" type="array">
+         <obj_property name="ElementShortName">[15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[14]" type="array">
+         <obj_property name="ElementShortName">[14][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[13]" type="array">
+         <obj_property name="ElementShortName">[13][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[12]" type="array">
+         <obj_property name="ElementShortName">[12][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[11]" type="array">
+         <obj_property name="ElementShortName">[11][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[10]" type="array">
+         <obj_property name="ElementShortName">[10][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[9]" type="array">
+         <obj_property name="ElementShortName">[9][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[8]" type="array">
+         <obj_property name="ElementShortName">[8][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[7]" type="array">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[6]" type="array">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[5]" type="array">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[4]" type="array">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[3]" type="array">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[2]" type="array">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[1]" type="array">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ID_stage_inst/RF/RF[0]" type="array">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/Sel_Src1" type="array">
+      <obj_property name="ElementShortName">Sel_Src1[1:0]</obj_property>
+      <obj_property name="ObjectShortName">Sel_Src1[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/Sel_Src2" type="array">
+      <obj_property name="ElementShortName">Sel_Src2[1:0]</obj_property>
+      <obj_property name="ObjectShortName">Sel_Src2[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/IF_stage_inst/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/EXE_stage_inst/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="group1528" type="group">
+      <obj_property name="label">Forwarding</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/src1" type="array">
+         <obj_property name="ElementShortName">src1[3:0]</obj_property>
+         <obj_property name="ObjectShortName">src1[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/src2" type="array">
+         <obj_property name="ElementShortName">src2[3:0]</obj_property>
+         <obj_property name="ObjectShortName">src2[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/dest_mem" type="array">
+         <obj_property name="ElementShortName">dest_mem[3:0]</obj_property>
+         <obj_property name="ObjectShortName">dest_mem[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/wb_en_mem" type="logic">
+         <obj_property name="ElementShortName">wb_en_mem</obj_property>
+         <obj_property name="ObjectShortName">wb_en_mem</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/dest_wb" type="array">
+         <obj_property name="ElementShortName">dest_wb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">dest_wb[3:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/wb_en_wb" type="logic">
+         <obj_property name="ElementShortName">wb_en_wb</obj_property>
+         <obj_property name="ObjectShortName">wb_en_wb</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/en" type="logic">
+         <obj_property name="ElementShortName">en</obj_property>
+         <obj_property name="ObjectShortName">en</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/sel_src1" type="array">
+         <obj_property name="ElementShortName">sel_src1[1:0]</obj_property>
+         <obj_property name="ObjectShortName">sel_src1[1:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/ForwardingUnit_Inst/sel_src2" type="array">
+         <obj_property name="ElementShortName">sel_src2[1:0]</obj_property>
+         <obj_property name="ObjectShortName">sel_src2[1:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/Val2_Forwarding" type="array">
+         <obj_property name="ElementShortName">Val2_Forwarding[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val2_Forwarding[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/Val1_Forwarding" type="array">
+         <obj_property name="ElementShortName">Val1_Forwarding[31:0]</obj_property>
+         <obj_property name="ObjectShortName">Val1_Forwarding[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/MEM_R_EN_EXE_Reg" type="logic">
+      <obj_property name="ElementShortName">MEM_R_EN_EXE_Reg</obj_property>
+      <obj_property name="ObjectShortName">MEM_R_EN_EXE_Reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_ARM/uut/sram_controller_inst/cpu_ready" type="logic">
+      <obj_property name="ElementShortName">cpu_ready</obj_property>
+      <obj_property name="ObjectShortName">cpu_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="group595" type="group">
+      <obj_property name="label">SRAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/Address" type="array">
+         <obj_property name="ElementShortName">Address[10:0]</obj_property>
+         <obj_property name="ObjectShortName">Address[10:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/CS_n" type="logic">
+         <obj_property name="ElementShortName">CS_n</obj_property>
+         <obj_property name="ObjectShortName">CS_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/OE_n" type="logic">
+         <obj_property name="ElementShortName">OE_n</obj_property>
+         <obj_property name="ObjectShortName">OE_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/WE_n" type="logic">
+         <obj_property name="ElementShortName">WE_n</obj_property>
+         <obj_property name="ObjectShortName">WE_n</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/DataIO" type="array">
+         <obj_property name="ElementShortName">DataIO[7:0]</obj_property>
+         <obj_property name="ObjectShortName">DataIO[7:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_ARM/uut/sram_model_inst/read_data" type="array">
+         <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

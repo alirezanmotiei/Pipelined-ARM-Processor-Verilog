@@ -1,0 +1,34 @@
+# ModelSim / Questa
+work/
+transcript
+vsim.wlf
+*.mti
+*.mpf
+*.cr.mti
+
+# Xilinx Vivado
+*.jou
+*.log
+*.pb
+*.wdb
+*.vds
+*.dcp
+*.rpt
+*.str
+*.xpr
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+*.cache/
+*.hw/
+.Xil/
+hd_visual/
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.vscode/
+.idea/
