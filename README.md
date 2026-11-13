@@ -4,13 +4,13 @@
 [![Verilog-2001](https://img.shields.io/badge/HDL-Verilog--2001-blue.svg)](https://en.wikipedia.org/wiki/Verilog)
 [![EDA Tool](https://img.shields.io/badge/EDA-Xilinx%20Vivado%20%7C%20ModelSim-red.svg)](https://www.xilinx.com/products/design-tools/vivado.html)
 [![FPGA Target](https://img.shields.io/badge/FPGA-Xilinx%20Zynq--7000%20(XC7Z010)-orange.svg)](https://www.xilinx.com/products/silicon-devices/soc/zynq-7000.html)
-[![Frequency](https://img.shields.io/badge/Fmax-125.09%20MHz-brightgreen.svg)]()
+[![Synthesis](https://img.shields.io/badge/Synthesis-Vivado%20Verified-brightgreen.svg)](#fpga-implementation--synthesis-results)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Institution](https://img.shields.io/badge/University%20of%20Tehran-ECE%20Department-003366.svg)](https://ece.ut.ac.ir/)
 
 A high-performance, synthesizable **32-bit 5-Stage Pipelined RISC Processor** implementing an **ARMv4T-compatible integer instruction set** in Verilog HDL. Designed and verified as part of the **Computer Architecture Laboratory** at the **Department of Electrical and Computer Engineering, University of Tehran**, supervised by **Dr. Saeed Safari**.
 
-The core features full hardware handling of structural, data, and control hazards via a **Dynamic Operand Forwarding Unit** (zero-bubble bypassing from EX/MEM and MEM/WB stages) and a **Load-Use Hazard Detection Unit**. To interface with narrow physical memories, a multi-cycle **SRAM Controller FSM** transparently serializes 32-bit word transactions into 4 sequential 8-bit byte bursts with automated pipeline freezing. Physical implementation on a **Xilinx Zynq-7000 SoC (XC7Z010CLG400-1)** achieves **$F_{\max} = 125.09	ext{ MHz}$** with an ultra-compact footprint of **809 Slice LUTs (4.60%)** and **zero timing violations**.
+The core features full hardware handling of structural, data, and control hazards via a **Dynamic Operand Forwarding Unit** (zero-bubble bypassing from EX/MEM and MEM/WB stages) and a **Load-Use Hazard Detection Unit**. To interface with narrow physical memories, a multi-cycle **SRAM Controller FSM** transparently serializes 32-bit word transactions into 4 sequential 8-bit byte bursts with automated pipeline freezing. Physical implementation of the full board wrapper (`ARM_wrapper`, including the processor core, VIO core, and debouncer) on a **Xilinx Zynq-7000 SoC (XC7Z010)** uses **1,567 Slice LUTs (8.90%)**, **1,152 Slice Flip-Flops (3.27%)**, and **0.50 BRAM tiles (0.83%)**.
 
 ---
 
@@ -41,9 +41,9 @@ The core features full hardware handling of structural, data, and control hazard
 - **Load-Use Hazard Detection**: Detects RAW data dependencies following `LDR` instructions, automatically freezing `PC` and `IF/ID` stage registers while inserting a bubble into `ID/EX`.
 - **Branch Penalty Minimization**: Branch evaluation in the `EX` stage with a 2-cycle flush mechanism clearing speculatively fetched instructions on branch taken.
 - **Architectural Condition Code Evaluator**: Full support for 15 ARM condition codes (`EQ`, `NE`, `CS/HS`, `CC/LO`, `MI`, `PL`, `VS`, `VC`, `HI`, `LS`, `GE`, `LT`, `GT`, `LE`, `AL`) against `NZCV` flags.
-- **Flexible Shifter Operand (Barrel Shifter)**: Hardware generator supporting 32-bit rotated immediates ($8	ext{-bit immediate} \ 	ext{ROR} \ 2 	imes 	ext{rotate\_imm}$) and register shifts (`LSL`, `LSR`, `ASR`, `ROR`).
+- **Flexible Shifter Operand (Barrel Shifter)**: Hardware generator supporting 32-bit rotated immediates ($8\text{-bit immediate} \ \text{ROR} \ 2 \times \text{rotate\_imm}$) and register shifts (`LSL`, `LSR`, `ASR`, `ROR`).
 - **Multi-Cycle SRAM Controller**: 3-state Finite State Machine (`IDLE`, `WORK`, `DONE`) managing 4-cycle sequential byte access over an 8-bit bidirectional memory bus with `cpu_ready` handshaking.
-- **Banked Register File**: 16 $	imes$ 32-bit registers ($R_0 - R_{15}$) featuring dual asynchronous read ports and negative-edge synchronous writing to prevent write-after-read hazards within the same clock cycle.
+- **Banked Register File**: 16 $\times$ 32-bit registers ($R_0 - R_{15}$) featuring dual asynchronous read ports and negative-edge synchronous writing to prevent write-after-read hazards within the same clock cycle.
 - **Hardware Verified**: Board-level wrapper with debounce filtering and Integrated Logic Analyzer (ILA) real-time hardware probing on Xilinx Zynq-7000 FPGA.
 
 ---
@@ -111,7 +111,7 @@ graph TD
 ### 1. Instruction Fetch (IF)
 - **Program Counter (`pc.v`)**: 32-bit synchronous register with asynchronous active-high reset and freeze control.
 - **PC Increment Adder (`adder.v`)**: Adds `32'd1` each cycle (word-aligned addressing in local memory model).
-- **Branch Multiplexer (`mux2to1.v`)**: Selects between sequential $	ext{PC}+1$ and branch target address computed in the `EX` stage.
+- **Branch Multiplexer (`mux2to1.v`)**: Selects between sequential $\text{PC}+1$ and branch target address computed in the `EX` stage.
 - **Pipeline Freeze Support**: Holds the current PC value unconditionally whenever `hazard_detected` or `~sram_ready` is asserted.
 
 <p align="center">
@@ -123,7 +123,7 @@ graph TD
 
 ### 2. Instruction Decode & Register File (ID)
 - **Control Unit (`controller.v`)**: Decodes 4-bit Opcode, 2-bit Mode, and S-bit to emit 9-bit execution and pipeline control words (`wb_en`, `mem_r_en`, `mem_w_en`, `b`, `s_out`, `exe_cmd`).
-- **Banked Register File (`register_file.v`)**: $16 	imes 32$-bit register array ($R_0-R_{15}$). Writes occur on `negedge clk` while reads are asynchronous (`assign reg1 = rf[src1]`), eliminating intra-cycle RAW structural races.
+- **Banked Register File (`register_file.v`)**: $16 \times 32$-bit register array ($R_0-R_{15}$). Writes occur on `negedge clk` while reads are asynchronous (`assign reg1 = rf[src1]`), eliminating intra-cycle RAW structural races.
 - **Condition Evaluator (`condition_check.v`)**: Asserts `cond_met` based on active status flags (`Z`, `C`, `N`, `V`). If the condition fails, the instruction is converted into a pipeline `NOP` via bubble injection.
 - **Second Source Selector (`mux2to1_4.v`)**: Selects register index $R_m$ (`Inst[3:0]`) for data-processing operations, or register index $R_d$ (`Inst[15:12]`) for store operations (`STR`), since $R_d$ serves as the data source to be written to memory.
 
@@ -136,15 +136,15 @@ graph TD
 
 ### 3. Execution & Arithmetic Logic Unit (EX)
 - **32-bit ALU (`alu.v`)**: Supports arithmetic (`ADD`, `ADC`, `SUB`, `SBC`), logical (`AND`, `ORR`, `EOR`, `MOV`, `MVN`), and comparison operations (`CMP`, `TST`). Computes condition flags:
-  $$	ext{Zero Flag } (Z) = (	ext{ALU\_Res} == 0)$$
-  $$	ext{Negative Flag } (N) = 	ext{ALU\_Res}[31]$$
-  $$	ext{Carry Flag } (C) = 	ext{Carry-out of addition/subtraction}$$
-  $$	ext{Overflow Flag } (V) = (\sim V_1[31] \land \sim V_2[31] \land R[31]) \lor (V_1[31] \land V_2[31] \land \sim R[31])$$
+  $$\text{Zero Flag } (Z) = (\text{ALU\_Res} == 0)$$
+  $$\text{Negative Flag } (N) = \text{ALU\_Res}[31]$$
+  $$\text{Carry Flag } (C) = \text{Carry-out of addition/subtraction}$$
+  $$\text{Overflow Flag } (V) = (\sim V_1[31] \land \sim V_2[31] \land R[31]) \lor (V_1[31] \land V_2[31] \land \sim R[31])$$
 - **Val2 Generator (`val2_generator.v`)**: Implements flexible shifter operand hardware:
-  - Immediate mode ($I=1$): 8-bit immediate rotated right by $2 	imes 	ext{rotate\_imm}$.
+  - Immediate mode ($I=1$): 8-bit immediate rotated right by $2 \times \text{rotate\_imm}$.
   - Memory offset mode: 12-bit immediate zero-extended.
   - Register shift mode ($I=0$): `LSL` (00), `LSR` (01), `ASR` (10, using `$signed`), `ROR` (11).
-- **Branch Target Adder (`adder.v`)**: Computes $	ext{Branch Target} = 	ext{PC} + 	ext{SignExtended}(	ext{Imm24})$.
+- **Branch Target Adder (`adder.v`)**: Computes $\text{Branch Target} = \text{PC} + \text{SignExtended}(\text{Imm24})$.
 
 <p align="center">
   <img src="docs/figures/exe_stage_waveform.png" alt="EXE Stage Waveform" width="85%"><br>
@@ -175,18 +175,18 @@ graph TD
 ### 1. Dynamic Forwarding Unit (`forwarding_unit.v`)
 Without operand forwarding, any Read-After-Write (RAW) data dependency requires 2 stall cycles until the result is written back to the Register File. The Dynamic Forwarding Unit monitors stage registers and dynamically routes calculated values directly to ALU inputs:
 
-$$	ext{Forward}_{	ext{src1}} = 
-egin{cases}
-2	ext{'b01} & 	ext{if } 	ext{wb\_en}_{	ext{MEM}} \land (	ext{dest}_{	ext{MEM}} == 	ext{src1}) \quad 	ext{[Forward from MEM stage]} \
-2	ext{'b10} & 	ext{else if } 	ext{wb\_en}_{	ext{WB}} \land (	ext{dest}_{	ext{WB}} == 	ext{src1}) \quad 	ext{[Forward from WB stage]} \
-2	ext{'b00} & 	ext{otherwise} \quad 	ext{[Use Register File output]}
+$$\text{Forward}_{\text{src1}} = 
+\begin{cases}
+2'\text{b01} & \text{if } \text{wb\_en}_{\text{MEM}} \land (\text{dest}_{\text{MEM}} == \text{src1}) \quad \text{[Forward from MEM stage]} \\
+2'\text{b10} & \text{else if } \text{wb\_en}_{\text{WB}} \land (\text{dest}_{\text{WB}} == \text{src1}) \quad \text{[Forward from WB stage]} \\
+2'\text{b00} & \text{otherwise} \quad \text{[Use Register File output]}
 \end{cases}$$
 
-$$	ext{Forward}_{	ext{src2}} = 
-egin{cases}
-2	ext{'b01} & 	ext{if } 	ext{wb\_en}_{	ext{MEM}} \land (	ext{dest}_{	ext{MEM}} == 	ext{src2}) \quad 	ext{[Forward from MEM stage]} \
-2	ext{'b10} & 	ext{else if } 	ext{wb\_en}_{	ext{WB}} \land (	ext{dest}_{	ext{WB}} == 	ext{src2}) \quad 	ext{[Forward from WB stage]} \
-2	ext{'b00} & 	ext{otherwise} \quad 	ext{[Use Register File output]}
+$$\text{Forward}_{\text{src2}} = 
+\begin{cases}
+2'\text{b01} & \text{if } \text{wb\_en}_{\text{MEM}} \land (\text{dest}_{\text{MEM}} == \text{src2}) \quad \text{[Forward from MEM stage]} \\
+2'\text{b10} & \text{else if } \text{wb\_en}_{\text{WB}} \land (\text{dest}_{\text{WB}} == \text{src2}) \quad \text{[Forward from WB stage]} \\
+2'\text{b00} & \text{otherwise} \quad \text{[Use Register File output]}
 \end{cases}$$
 
 ### 2. Load-Use Hazard Detection Unit (`hazard_unit.v`)
@@ -225,16 +225,16 @@ The SRAM memory controller serializes 32-bit word accesses across an 8-bit exter
 
 The processor was rigorously benchmarked using a standard 47-instruction verification program testing arithmetic operations, load-use hazards, branch loops, and multi-cycle memory transfers:
 
-| Architectural Configuration | Clock Cycles ($T_{	ext{clk}}=10	ext{ ns}$) | Total Execution Time | Average CPI | Speedup from Forwarding |
+| Architectural Configuration | Clock Cycles ($T_{\text{clk}}=10\text{ ns}$) | Total Execution Time | Average CPI | Speedup from Forwarding |
 | :--- | :---: | :---: | :---: | :---: |
-| **Ideal Memory (No Forwarding)** | 292 | 2,920 ns | 6.213 | — |
+| **Ideal Memory (No Forwarding)** | 292 | 2,920 ns | 6.213 | Baseline |
 | **Ideal Memory (With Forwarding)** | **200** | **2,000 ns** | **4.255** | **+31.51%** |
-| **Multi-Cycle SRAM (No Forwarding)** | 529 | 5,290 ns | 11.255 | — |
+| **Multi-Cycle SRAM (No Forwarding)** | 529 | 5,290 ns | 11.255 | Baseline |
 | **Multi-Cycle SRAM (With Forwarding)** | **437** | **4,370 ns** | **9.298** | **+17.39%** |
 
-$$	ext{Speedup}_{	ext{ideal}} = rac{6.213 - 4.255}{6.213} 	imes 100\% = \mathbf{31.51\%}$$
+$$\text{Speedup}_{\text{ideal}} = \frac{6.213 - 4.255}{6.213} \times 100\% = \mathbf{31.51\%}$$
 
-$$	ext{Speedup}_{	ext{SRAM}} = rac{11.255 - 9.298}{11.255} 	imes 100\% = \mathbf{17.39\%}$$
+$$\text{Speedup}_{\text{SRAM}} = \frac{11.255 - 9.298}{11.255} \times 100\% = \mathbf{17.39\%}$$
 
 <p align="center">
   <img src="docs/figures/sram_waveform_forwarding.png" alt="SRAM Waveform with Forwarding" width="49%">
@@ -246,36 +246,25 @@ $$	ext{Speedup}_{	ext{SRAM}} = rac{11.255 - 9.298}{11.255} 	imes 100\% = \mathb
 
 ## FPGA Implementation & Synthesis Results
 
-The processor was synthesized and placed-and-routed using **Xilinx Vivado 2018.3** targeting the **Xilinx Zynq-7000 SoC (`xc7z010clg400-1`)**.
+The processor and FPGA debugging wrapper (`ARM_wrapper`, instantiating `ARM_inst`, Xilinx Virtual Input/Output `vio_0`, and pushbutton `deb_inst`) were synthesized and implemented in **Xilinx Vivado** targeting the **Xilinx Zynq-7000 SoC (`xc7z010`)**.
 
-### Hardware Utilization Summary
+### Hardware Utilization Summary (`ARM_wrapper`)
 
-| Site Type | Used | Available | Utilization (%) |
-| :--- | :---: | :---: | :---: |
-| **Slice LUTs** | **809** | **17,600** | **4.60%** |
-| ├── *LUT as Logic* | 679 | 17,600 | 3.86% |
-| └── *LUT as Shift Register* | 130 | 6,000 | 2.17% |
-| **Slice Registers (FF)** | **1,365** | **35,200** | **3.88%** |
-| **Block RAM Tile** | **1.5** | **60** | **2.50%** |
-| ├── *RAMB36E1* | 1 | 60 | 1.67% |
-| └── *RAMB18E1* | 1 | 120 | 0.83% |
-| **F7 Multiplexers** | **3** | **8,800** | **0.03%** |
-| **Global Clock Buffers (BUFG)** | **1** | **32** | **3.13%** |
+| Resource Type | `ARM_inst` (Core) | `VIO (vio_0)` | `deb_inst` | Total (`ARM_wrapper`) | Available | Utilization (%) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Slice LUTs** | 1,458 | 102 | 7 | **1,567** | 17,600 | **8.90%** |
+| **Slice Registers (FF)** | 904 | 231 | 17 | **1,152** | 35,200 | **3.27%** |
+| **Block RAM Tile (BRAM)** | 0.500 | 0 | 0 | **0.50** | 60 | **0.83%** |
+| **I/O Pins** | - | - | - | **2** | 100 | **2.00%** |
 
 <p align="center">
   <img src="docs/figures/vivado_utilization_summary.png" alt="Vivado Utilization Chart" width="80%"><br>
-  <em>Figure 9: Post-implementation hardware utilization on Xilinx Zynq-7000 FPGA.</em>
+  <em>Figure 9: Post-implementation hardware utilization on Xilinx Zynq-7000 FPGA (8.90% LUT, 3.27% FF, 0.83% BRAM, 2.00% IO).</em>
 </p>
 
-### Timing & Frequency Analysis
-- **Target Constraint Clock**: $50.00	ext{ MHz}$ ($T_{	ext{clk}} = 20.000	ext{ ns}$)
-- **Worst Negative Slack (WNS)**: $\mathbf{+12.006	ext{ ns}}$ (Zero timing violations)
-- **Worst Hold Slack (WHS)**: $+0.023	ext{ ns}$
-- **Worst Pulse Width Slack (WPWS)**: $+8.750	ext{ ns}$
-- **Minimum Allowable Clock Period**:
-  $$T_{\min} = T_{	ext{req}} - 	ext{WNS} = 20.000	ext{ ns} - 12.006	ext{ ns} = \mathbf{7.994	ext{ ns}}$$
-- **Maximum Operating Frequency ($F_{\max}$)**:
-  $$F_{\max} = rac{1}{T_{\min}} = rac{1}{7.994	ext{ ns}} pprox \mathbf{125.09	ext{ MHz}}$$
+### Synthesis & Hardware Verification Notes
+- **Simulation Clocking**: Cycle-accurate ModelSim verification executes the 47-instruction test program at $T_{\text{clk}} = 10\text{ ns}$ ($100\text{ MHz}$ testbench clock).
+- **On-Board Bring-Up**: Physical board bring-up pairs `debouncer.v` pushbutton conditioning with Xilinx `VIO` probes on Zynq-7000.
 
 <p align="center">
   <img src="docs/figures/vivado_synthesized_device.png" alt="Synthesized Device View" width="49%">
@@ -387,16 +376,16 @@ forwarding_en = 1; // 1 = Dynamic Forwarding Enabled (200 cycles / 437 cycles)
 ۶. **پشتیبانی کامل از شروط دستوری ARM**: ارزیابی بلادرنگ ۱۵ کد شرطی ARM با توجه به ۴ بیت پرچم وضعیت (`Z, C, N, V`).
 
 #### نتایج ارزیابی و بنچ‌مارک شبیه‌سازی (۴۷ دستورالعمل):
-- **حافظه ایده‌آل تک‌سیکلی بدون فورواردینگ**: ۲۹۲ سیکل ($	ext{CPI} = 6.213$)
-- **حافظه ایده‌آل تک‌سیکلی با فورواردینگ**: ۲۰۰ سیکل ($	ext{CPI} = 4.255$) $\leftarrow$ **۳۱.۵۱٪ بهبود سرعت (Speedup)**
-- **حافظه چندسیکلی SRAM بدون فورواردینگ**: ۵۲۹ سیکل ($	ext{CPI} = 11.255$)
-- **حافظه چندسیکلی SRAM با فورواردینگ**: ۴۳۷ سیکل ($	ext{CPI} = 9.298$) $\leftarrow$ **۱۷.۳۹٪ بهبود سرعت (Speedup)**
+- **حافظه ایده‌آل تک‌سیکلی بدون فورواردینگ**: ۲۹۲ سیکل ($\text{CPI} = 6.213$)
+- **حافظه ایده‌آل تک‌سیکلی با فورواردینگ**: ۲۰۰ سیکل ($\text{CPI} = 4.255$) $\leftarrow$ **۳۱.۵۱٪ بهبود سرعت (Speedup)**
+- **حافظه چندسیکلی SRAM بدون فورواردینگ**: ۵۲۹ سیکل ($\text{CPI} = 11.255$)
+- **حافظه چندسیکلی SRAM با فورواردینگ**: ۴۳۷ سیکل ($\text{CPI} = 9.298$) $\leftarrow$ **۱۷.۳۹٪ بهبود سرعت (Speedup)**
 
-#### نتایج سنتز سخت‌افزاری روی تراشه FPGA (Xilinx Zynq-7000):
-- **تعداد Slice LUTs مصرفی**: ۸۰۹ از ۱۷,۶۰۰ (فقط ۴.۶۰٪ کل تراشه)
-- **تعداد Slice Registers (FFs)**: ۱,۳۶۵ از ۳۵,۲۰۰ (فقط ۳.۸۸٪)
-- **حافظه Block RAM مصرفی**: ۱.۵ تایل (۲.۵۰٪)
-- **بیشینه فرکانس کاری ($F_{\max}$)**: **۱۲۵.۰۹ مگاهرتز** ($T_{\min} = 7.994	ext{ ns}$ با حاشیه مثبت $	ext{WNS} = +12.006	ext{ ns}$ بدون کمترین نقض زمانی).
+#### نتایج سنتز سخت‌افزاری روی تراشه FPGA (Xilinx Zynq-7000 - `ARM_wrapper`):
+- **تعداد Slice LUTs مصرفی**: ۱,۵۶۷ از ۱۷,۶۰۰ (۸.۹۰٪ کل تراشه - شامل ۱,۴۵۸ LUT برای هسته `ARM_inst`، ۱۰۲ LUT برای `VIO` و ۷ LUT برای `deb_inst`)
+- **تعداد Slice Registers (FFs)**: ۱,۱۵۲ از ۳۵,۲۰۰ (۳.۲۷٪ - شامل ۹۰۴ FF در هسته `ARM_inst`، ۲۳۱ در `VIO` و ۱۷ در `deb_inst`)
+- **حافظه Block RAM مصرفی**: ۰.۵۰ تایل از ۶۰ (۰.۸۳٪ - مربوط به هسته `ARM_inst`)
+- **تعداد پین‌های I/O**: ۲ از ۱۰۰ (۲.۰۰٪)
 
 </div>
 

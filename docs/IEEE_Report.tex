@@ -25,14 +25,14 @@
 \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
 \textit{University of Tehran}\\
 Tehran, Iran \\
-Email: \href{mailto:doomhammerali@email.com}{doomhammerali@email.com} \\
+Email: \href{mailto:alirezanmotiei@gmail.com}{alirezanmotiei@gmail.com} \\
 Student ID: 810100224}
 }
 
 \maketitle
 
 \begin{abstract}
-This paper presents the architectural design, formal verification, and FPGA physical implementation of a 32-bit 5-stage pipelined processor implementing an ARMv4T-compatible RISC architecture using Verilog HDL. The processor features Instruction Fetch (IF), Instruction Decode (ID), Execution (EX), Memory Access (MEM), and Write-Back (WB) stages. To maximize throughput and mitigate pipeline stalls, a Dynamic Operand Forwarding Unit is integrated alongside a Load-Use Hazard Detection Unit, resolving Read-After-Write (RAW) data dependencies from both EX/MEM and MEM/WB pipeline registers with zero penalty bubbles for ALU-dependent instructions. Furthermore, a Finite State Machine (FSM) multi-cycle SRAM memory controller is designed to bridge the 32-bit core datapath with an 8-bit external byte-addressable SRAM with active-low signaling and synchronization handshakes. Cycle-accurate simulations reveal that operand forwarding reduces total execution cycles by 31.51\% under single-cycle memory and by 17.39\% under multi-cycle SRAM access. Physical implementation on a Xilinx Zynq-7000 FPGA (XC7Z010CLG400-1) demonstrates an efficient hardware footprint of 809 Slice LUTs (4.60\% utilization), 1,365 Slice Flip-Flops, and an achieved maximum operating frequency ($F_{\max}$) of 125.09 MHz with positive worst negative slack (+12.006 ns).
+This paper presents the architectural design, formal verification, and FPGA physical implementation of a 32-bit 5-stage pipelined processor implementing an ARMv4T-compatible RISC architecture using Verilog HDL. The processor features Instruction Fetch (IF), Instruction Decode (ID), Execution (EX), Memory Access (MEM), and Write-Back (WB) stages. To maximize throughput and mitigate pipeline stalls, a Dynamic Operand Forwarding Unit is integrated alongside a Load-Use Hazard Detection Unit, resolving Read-After-Write (RAW) data dependencies from both EX/MEM and MEM/WB pipeline registers with zero penalty bubbles for ALU-dependent instructions. Furthermore, a Finite State Machine (FSM) multi-cycle SRAM memory controller is designed to bridge the 32-bit core datapath with an 8-bit external byte-addressable SRAM with active-low signaling and synchronization handshakes. Cycle-accurate simulations reveal that operand forwarding reduces total execution cycles by 31.51\% under single-cycle memory and by 17.39\% under multi-cycle SRAM access. Physical implementation of the full board wrapper (\texttt{ARM\_wrapper}, comprising the \texttt{ARM\_inst} core, Xilinx VIO debugging core, and pushbutton debouncer) on a Xilinx Zynq-7000 FPGA (\texttt{xc7z010}) uses 1,567 Slice LUTs (8.90\% utilization, of which 1,458 LUTs belong to the processor core), 1,152 Slice Flip-Flops (3.27\%, 904 in the core), and 0.50 Block RAM tiles (0.83\%).
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -109,34 +109,26 @@ The empirical speedup from dynamic forwarding is:
 \end{equation}
 
 \subsection{FPGA Synthesis and Resource Utilization}
-The design was synthesized and implemented on the Xilinx Zynq-7000 FPGA SoC (\texttt{xc7z010clg400-1}) using Vivado 2018.3. Table~\ref{tab:utilization} details post-synthesis and placement resource utilization.
+The design was synthesized and implemented as a top-level board wrapper (\texttt{ARM\_wrapper}, integrating \texttt{ARM\_inst}, Xilinx Virtual Input/Output \texttt{vio\_0}, and pushbutton debouncer \texttt{deb\_inst}) on the Xilinx Zynq-7000 FPGA SoC (\texttt{xc7z010}) using Xilinx Vivado. Table~\ref{tab:utilization} details post-implementation resource utilization from the Vivado Utilization Report.
 
 \begin{table}[htbp]
 \caption{FPGA Hardware Resource Utilization (Xilinx Zynq-7000)}
 \label{tab:utilization}
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Resource} & \textbf{Used} & \textbf{Available} & \textbf{Utilization (\%)} \\
+\textbf{Resource} & \textbf{ARM Core} & \textbf{VIO + Deb.} & \textbf{Total} & \textbf{Util. (\%)} \\
 \midrule
-Slice LUTs & 809 & 17,600 & 4.60\% \\
-\quad LUT as Logic & 679 & 17,600 & 3.86\% \\
-\quad LUT as Shift Register & 130 & 6,000 & 2.17\% \\
-Slice Registers (FF) & 1,365 & 35,200 & 3.88\% \\
-Block RAM (BRAM Tile) & 1.5 & 60 & 2.50\% \\
-F7 Multiplexers & 3 & 8,800 & 0.03\% \\
-Global Clock Buffers (BUFG) & 1 & 32 & 3.13\% \\
+Slice LUTs & 1,458 & 109 & \textbf{1,567} & 8.90\% \\
+Slice Registers (FF) & 904 & 248 & \textbf{1,152} & 3.27\% \\
+Block RAM (Tile) & 0.500 & 0 & \textbf{0.50} & 0.83\% \\
+I/O Pins & --- & --- & \textbf{2} & 2.00\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Static timing analysis under a 50 MHz baseline constraint ($T = 20\text{ ns}$) yielded a Worst Negative Slack (WNS) of $+12.006\text{ ns}$ and Worst Hold Slack (WHS) of $+0.023\text{ ns}$ with zero timing violations. Consequently, the minimum allowable clock period is:
-\begin{equation}
-T_{\min} = 20\text{ ns} - 12.006\text{ ns} = 7.994\text{ ns} \implies F_{\max} \approx 125.09\text{ MHz}
-\end{equation}
-
 \section{Conclusion}
-A high-performance, pipelined 32-bit ARM RISC processor core was successfully designed, verified, and mapped onto a Xilinx Zynq-7000 FPGA. The hardware forwarding unit effectively mitigated data hazards, achieving a 31.51\% reduction in total execution cycles. The multi-cycle SRAM controller successfully abstracted narrow physical memory constraints into the pipelined execution datapath with automated handshake freezing. The synthesized processor demonstrated minimal silicon utilization (4.6\% LUTs) and robust timing closure operating up to 125 MHz.
+A pipelined 32-bit ARMv4T RISC processor core was designed, verified in cycle-accurate simulation, and mapped onto a Xilinx Zynq-7000 FPGA. The hardware forwarding unit effectively mitigated RAW data hazards, achieving a 31.51\% reduction in total execution cycles with single-cycle memory and a 17.39\% reduction with a multi-cycle 8-bit external SRAM interface. The complete board wrapper synthesized within 8.90\% Slice LUTs (1,567 LUTs), 3.27\% Slice Flip-Flops (1,152 FFs), and 0.83\% BRAM (0.50 tiles).
 
 \section*{Acknowledgment}
 The author expresses sincere gratitude to Dr. Saeed Safari, Department of Electrical and Computer Engineering, University of Tehran, for guidance and supervision throughout the Computer Architecture Laboratory curriculum.
